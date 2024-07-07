@@ -1,0 +1,765 @@
+#root {
+  margin: 0px;
+  direction: ltr;
+  width: 100%;
+  height: 100%;
+  overflow-x: hidden;
+
+}
+
+.body {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow-x: hidden;
+}
+
+.registration {
+  width: 380px;
+  max-width: 380px;
+  padding: 2rem;
+  box-shadow: 0 0 40px rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+  direction: ltr;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: auto;
+  margin-bottom: 5%;
+  margin-top: 5%;
+}
+
+.input:focus {
+  border-color: #4c4084;
+  background: #ffffff;
+}
+
+.input {
+  display: block;
+  width: 100%;
+  padding: 0.75rem;
+  box-sizing: border-box;
+  border-radius: 4px;
+  border: 1px solid #dddddd;
+  outline: none;
+  background: #eeeeee;
+  transition: 0.2s, black 0.2s;
+  margin-bottom: 0.5rem;
+}
+
+.Connect,
+.btnOkSignUp,
+.btnOkLogIn {
+  width: 100%;
+  padding: 1rem 2rem;
+  font-weight: bold;
+  font-size: 1.1rem;
+  color: #ffffff;
+  border: none;
+  border-radius: 4px;
+  outline: none;
+  cursor: pointer;
+  background: #4c4084;
+  margin-bottom: 1rem;
+}
+
+.button:hover {
+  background: #4c4084
+}
+
+.button:active {
+  transform: scale(0.98);
+}
+
+.text {
+  text-align: center;
+}
+
+.link {
+  color: #000000;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.error {
+  font-weight: bold;
+}
+
+.link:hover {
+  text-decoration: underline;
+}
+
+.title {
+  text-align: center;
+  color: #000000;
+  font-size: 30px;
+  margin: 0.5%;
+  margin-top: 2%;
+}
+
+.btnCancel,
+.btnConfirm {
+  font-weight: bold;
+  color: #ffffff;
+  border: none;
+  border-radius: 4px;
+  outline: none;
+  cursor: pointer;
+  background-color: #4c4084;
+  margin-bottom: 1rem;
+  margin-right: 1rem;
+}
+
+li {
+  list-style: none;
+}
+
+button {
+
+  margin: 4px;
+}
+
+.btn {
+  border-color: #3a3939;
+  border-radius: 4px;
+  border-style: groove;
+}
+
+.logout {
+  width: 380px;
+  max-width: 380px;
+  padding: 1rem;
+  box-shadow: 0 0 40px rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+  direction: ltr;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: auto;
+  margin-bottom: auto;
+}
+
+@media (max-width:1400px) {
+  footer {
+    position: fixed;
+  }
+}
+.draganddrop {
+  border: 2px dashed #cccccc;
+  border-radius: 4px;
+  padding: 20px;
+  text-align: center;
+  cursor: pointer;
+  margin-bottom: 20px;
+}
+
+.files-container {
+  margin-top: 20px;
+}
+
+.upload-btn {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.upload-btn:hover {
+  background-color: #0056b3;
+}
+
+.clients{
+  display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+.client {
+  width: 100%;
+  max-width: 250px;
+  margin-right: 0px;
+  padding: 1rem;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1rem;
+}
+
+.allClients{
+  display: grid;
+  grid-template-columns: repeat(4, minmax(250px, 0.5fr));
+  gap: 1em;
+  margin: 35px;
+  margin-left: 90px;
+}
+h1, h4, h2 {
+  text-align: center;
+  margin-bottom: 1%;
+}
+
+.mydetails{
+  border: 2px solid #cccccc;
+}
+
+
+
+h5{
+  text-align: start;
+  padding: 0%;
+  font-size: large;
+  margin: 1%;
+}
+
+
+
+@media screen and (max-width:900px) {
+
+  .allClients {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(300px, 0.5fr));
+    gap: 1em;
+    margin: 35px;
+    margin-left: 90px;
+    }
+
+  
+}
+.clientemail{
+  text-align: center;
+}
+
+@media screen and (max-width:500px) {
+
+  .allClients {
+    display: grid;
+    grid-template-columns: repeat(1, minmax(250px, 0.5fr));
+    gap: 1em;
+    margin: 35px;
+    margin-left: 90px;
+    }
+
+  
+}
+.container {
+  padding: 20px;
+}
+.container {
+  padding: 20px;
+  font-family: Arial, sans-serif; /* Make sure the font matches */
+}
+
+.draganddrop {
+  border: 2px dashed #cccccc;
+  border-radius: 4px;
+  padding:20px; /* Increased padding for more space */
+  text-align: center;
+  cursor: pointer;
+  margin-bottom: 20px;
+  color: #007bff; /* Color of the text */
+  background-color: #f0f4f7; /* Light background color to match the image */
+
+  }
+
+.files-container {
+  margin-top: 20px;
+}
+
+.file-box {
+  display: flex;
+  justify-content: space-between;
+  align-items: start;
+  border: 1px solid #cccccc;
+  padding: 15px;
+  margin: 15px; /* Adjusted margin for better spacing */
+  border-radius: 4px;
+  background-color: #ffffff; /* White background color */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Slight shadow for a subtle 3D effect */
+}
+
+.file-name {
+  margin-right: auto;
+  font-size: 14px; /* Adjusted font size */
+  color: #333333; /* Darker text color */
+  text-align: start;
+
+}
+
+.file-status {
+  margin-right: auto;
+  padding: 2px;
+  border-radius: 5px;
+}
+
+.upload-btn {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 8px 16px; /* Adjusted padding for button size */
+  border-radius: 4px;
+  cursor: pointer;
+  margin-left: 20px;
+}
+
+.upload-btn:hover {
+  background-color: #0056b3;
+}
+
+
+.search-bar {
+  display: flex;
+  align-items: center;
+  border: 1px solid #cccccc;
+  border-radius: 4px;
+  padding: 10px 10px;
+  margin: 15px;
+  width: 300px;
+  background-color: white;}
+
+.search-bar input {
+  border: none;
+  outline: none;
+  }
+.filesTitle{
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  /* border: 1px solid #cccccc; */
+  /* border-radius: 4px; */
+  padding: 2px;
+  margin: 10px;
+}
+
+
+/* Responsive styles for mobile devices */
+@media (max-width: 600px) {
+  .file-box {
+    flex-direction: column;
+    padding: 10px;
+  }
+
+  .file-actions {
+    flex-direction: row;
+    justify-content: space-around;
+    width: 100%;
+    margin-top: 10px;
+  }
+
+  .file-name,
+  .file-status,
+  .upload-btn,
+  .search-bar {
+    font-size: 12px;
+    margin-right: 0;
+  }
+
+  .upload-btn {
+    padding: 6px 12px;
+    margin-left: 0;
+    width: 100%;
+    margin-top: 10px;
+  }
+
+}
+/* 
+.line {
+  width:400px;
+  height: 1px;
+  background-color: #cccccc;
+  margin: 20px 0;
+} */
+
+
+.page_files{
+  
+border-radius: 4px;
+padding: 25px 10px; /* Increased padding for more space */
+text-align: center;
+cursor: pointer;
+background-color: #ffffff;
+}
+
+.file-date{
+  text-align: start;
+
+}
+
+button {
+  border-color: #000000;
+}
+
+.download,.comments,.delete
+{
+  border: 2px solid #cccccc
+}
+/*about us*/
+
+
+
+
+
+
+
+
+
+
+
+
+.about_us {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  padding: 0;
+  margin: 0;
+  position: relative; /* Add this line */
+}
+
+.header_section {
+  background-color: #f0f0f0;
+  width: 100%;
+  text-align: center;
+  padding: 10px 0;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+}
+
+.sign_in_button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  padding: 5px 10px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+}
+
+.sign_in_button:hover {
+  background-color: #0056b3;
+}
+
+.img_about_us {
+  width: 100px; /* Adjusted logo size */
+  height: auto;
+}
+
+.form_section {
+  background-color: #fff;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0;
+}
+
+.contact_info {
+  width: 50%;
+  text-align: center;
+  margin: 0px;
+}
+
+.img_about_us2 {
+  width: 100%;
+  height: auto;
+}
+
+form {
+  width: 50%;
+  margin: 0;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+form label {
+  margin-top: 10px;
+}
+
+form input, form textarea {
+  margin-top: 5px;
+  padding: 7px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+form button {
+  margin-top: 20px;
+  padding: 10px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+}
+
+
+
+
+
+.about_us {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  padding: 0;
+  margin: 0;
+  position: relative; /* Add this line */
+}
+
+.nav_section {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
+  padding: 10px;
+  box-sizing: border-box;
+}
+
+.sign_in_button {
+  padding: 5px 10px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+}
+
+.sign_in_button:hover {
+  background-color: #0056b3;
+}
+
+.header_section {
+  background-color: #f0f0f0;
+  width: 100%;
+  text-align: center;
+  padding: 10px 0;
+  position: relative;
+}
+
+.img_about_us {
+  width: 100px; /* Adjusted logo size */
+  height: auto;
+}
+
+.form_section {
+  background-color: #fff;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0;
+}
+
+.contact_info {
+  width: 50%;
+  text-align: center;
+}
+
+.img_about_us2 {
+  width: 100%;
+  height: auto;
+}
+
+form {
+  width: 50%;
+  margin: 0;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+form label {
+  margin-top: 10px;
+}
+
+form input, form textarea {
+  margin-top: 5px;
+  padding: 7px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+form button {
+  margin-top: 20px;
+  padding: 10px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+}
+
+form button:hover {
+  background-color: #0056b3;
+}
+
+.text_section {
+  background-color: #e0e0e0;
+  width: 100%;
+  padding: 10px;
+  box-sizing: border-box;
+}
+
+.text_section h1 {
+  text-align: center;
+  font-size: 1.5em;
+}
+
+.text_section p {
+  text-align: justify;
+  margin: 5px 0;
+  font-size: 0.9em;
+}
+
+
+
+/* @media only screen and (max-width: 600px) {
+  .file-content .download {
+    display: none;
+  }
+} */
+@media only screen and (max-width: 600px) {
+  /* כאן נכניס את העיצוב הרספונסיבי לגודלי מסך של פלאפונים */
+  /* .file-box {
+    margin: 5px;
+    padding: 10px;
+  } */
+
+  .file-details {
+    flex-direction: column;
+  }
+
+  .file-section {
+    padding: 3px;
+  }
+
+  .file-content {
+    margin-bottom: 5px;
+  }
+
+  .file-name a {
+    font-size: 12px;
+  }
+
+  .upload-btn {
+    margin-left: 0;
+  }
+}
+
+.select{
+  display: flex;
+    align-items: center;
+    border: 1px solid #cccccc;
+    border-radius: 4px;
+    padding: 1px 1px;
+    margin: 15px;
+    width: 300px;
+    background-color: white;
+}
+
+/* .file-box {
+  display: flex;
+  justify-content: space-between;
+} */
+
+.file-info,
+.file-status-container,
+.file-comments,
+.file-actions {
+  width: 25%; /* או כל ערך אחר של רוחב קבוע שברצונך */
+}
+
+.file-status{
+  width: fit-content;
+    margin-right: auto;
+    padding: 2px;
+    border-radius: 5px;
+    margin-left: auto;
+}
+
+.file-actions {
+  text-align: end;
+}
+
+@media (max-width: 768px) {
+  .file-info,
+  .file-status-container,
+  .file-comments,
+  .file-actions {
+      width: 100%; /* שינוי סוג ה-layout ל-block במקרה של רוחב קטן יותר */
+  }
+}
+
+.update{
+  padding: 3px 3px 3px 3px;
+  background-color: white;
+  border: 0.5px solid #cccccc
+
+}
+
+ul{
+  padding: 0;
+}
+/* 
+.res {
+  flex-direction: row;
+  flex: 1;
+  display: flex;
+} */
+
+/* סגנון כללי */
+
+@media (max-width: 768px) {
+  .file-box {
+    flex-direction: column;
+  }
+
+  .file-info,
+  .box,
+  .file-actions {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .file-info {
+    flex: 1;
+  }
+
+  .file-name {
+    flex: 2;
+  }
+
+  .file-status-container,
+  .file-comments {
+    flex-direction: row;
+    flex: 1;
+    align-items: center;
+  }
+
+  .file-actions {
+    flex-direction: row;
+  }
+  .file-actions button {
+    margin: 0 5px;
+  }
+
+
+  /* .res {
+    flex-direction: row;
+    flex: 1;
+    display: flex;
+  } */
+  .file-info, .box, .file-actions {
+    flex-direction: column;
+}
+
+}
+
+
+
+/*  */

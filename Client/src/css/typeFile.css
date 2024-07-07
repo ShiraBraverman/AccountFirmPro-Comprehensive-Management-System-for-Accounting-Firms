@@ -1,0 +1,138 @@
+.type-file-button {
+  background: none;
+  border: none;
+  color: #333;
+  /* font-size: 16px; */
+  padding: 10px; /* Adjust padding to fit content */
+  text-align: left;
+  cursor: pointer;
+  border-top: 1px solid #ddd; /* Lighter border color */
+  transition: background-color 0.3s; /* Smooth background color transition */
+}
+
+.type-file-button:hover {
+  background-color: #e7e7e7; /* Hover background color */
+}
+
+.sidebar {
+  height: 100%;
+  width: 0;
+  position: fixed;
+  z-index: 4;
+  top: 0;
+  right: 0;
+  background-color: #dbeaf2; /* Light background color */
+  overflow-x: hidden;
+  overflow-y: auto; /* Ensure vertical scroll works when open */
+  transition: width 0.5s; /* Smooth width transition */
+  box-shadow: -2px 0 10px rgba(0, 0, 0, 0.2); /* Subtle shadow */
+}
+
+.sidebar.open {
+  width: 280px;
+}
+
+.sidebar .closebtn {
+  position: absolute;
+  top: 15px;
+  right: 25px;
+  font-size: 36px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #333;
+}
+
+.sidebar a {
+  padding: 10px 15px;
+  text-decoration: none;
+  font-size: 18px;
+  color: #333;
+  display: block;
+  transition: 0.3s;
+  border-bottom: 1px solid #ddd; /* Lighter border color */
+}
+
+.sidebar a:hover {
+  background-color: #e7e7e7; /* Hover background color */
+  color: #000;
+}
+
+.modal {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.openbtn {
+  font-size: 20px;
+  cursor: pointer;
+  background: none;
+  color: #333;
+  padding: 8px;
+  border: none;
+  position: fixed;
+  top: 50%;
+  right: 0;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 2; /* Above the sidebar */
+}
+
+.dot {
+  width: 10px;
+  height: 10px;
+  background-color: black;
+  border-radius: 50%;
+  padding: 1%;
+  margin: 30%;
+  transition: transform 0.3s ease-in-out;
+}
+
+.dot.animate {
+  animation: dotAnimation 3s infinite alternate;
+}
+
+.dot:nth-child(1) {
+  animation-delay: 0s;
+}
+
+.dot:nth-child(2) {
+  animation-delay: 0.5s;
+}
+
+.dot:nth-child(3) {
+  animation-delay: 1s;
+}
+
+.num-files{
+  text-align: center;
+}
+@keyframes dotAnimation {
+  from {
+    transform: translateY(0) scale(1);
+  }
+  to {
+    transform: translateY(-20px) scale(1.2);
+  }
+}
+
+.hand{
+  font-size: 25px;
+}

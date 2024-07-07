@@ -1,0 +1,136 @@
+.str-chat__list {
+  height: 90vh;
+  overflow-x: hidden; /* הסתרת גלילה אופקית */
+  flex-grow: 1;
+  overflow-y: auto;
+
+}
+.messagesList {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow-x: hidden; /* הסתרת גלילה אופקית */
+  border: 0.05px solid black;
+  border-bottom-left-radius: var(--border-radius-md);
+  border-bottom-right-radius: var(--border-radius-md);
+
+  border-top: none;
+}
+
+.messaging.str-chat .str-chat__header-livestream {
+  border: 0.5px solid black;
+  /* border-bottom: none; */
+
+}
+
+.str-chat__channel-preview-messenger--active{
+  border: 0.5px solid black;
+
+}
+
+.str-chat {
+  height: 85vh;
+  font-family: var(--second-font);
+  color: var(--black);
+}
+
+/* קובץ CSS: chat.css */
+
+/* סגנון כללי לפס הגלילה */
+::-webkit-scrollbar {
+  width: 8px; /* רוחב פס הגלילה */
+  height: 8px; /* גובה פס הגלילה האופקי */
+}
+
+::-webkit-scrollbar-thumb {
+  background: #888; /* צבע פס הגלילה */
+  border-radius: 4px; /* עיגול פינות פס הגלילה */
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #555; /* צבע פס הגלילה כאשר העכבר מעל */
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1; /* צבע הרקע של פס הגלילה */
+}
+
+/* התאמה אישית של פס הגלילה עבור מחלקות ספציפיות */
+.messagesList {
+  overflow: auto; /* לוודא שיש גלילה פנימית */
+  width: 100%;
+}
+
+.messagesList::-webkit-scrollbar {
+  width: 8px;
+}
+
+.messagesList::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 4px;
+}
+
+.messagesList::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+.messagesList::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+.loading {
+  position: fixed; /* Ensures it stays in the middle regardless of scroll */
+  top: 50%; /* Moves the top of the element to the middle of the viewport */
+  left: 50%; /* Moves the left of the element to the middle of the viewport */
+  transform: translate(-50%, -50%); /* Centers the element precisely */
+  max-width: 100%; /* Ensures the image doesn't exceed its natural size */
+  max-height: 100%; /* Ensures the image doesn't exceed its natural size */
+}
+/* chat.css */
+
+/* Ensure the chat container takes up full width */
+.chat-container {
+  display: flex;
+  width: 100%;
+  height: 100%; /* Optionally set the height to full viewport height */
+}
+
+/* Adjust the layout of the channel list and channel container */
+.channel-list-container {
+  border-right: 1px solid #ccc; /* Example border between channel list and chat */
+  overflow-y: auto; /* Enable scrolling if channel list overflows */
+}
+
+.channel-container {
+  flex: 1; /* Take remaining space */
+  display: flex;
+  flex-direction: column;
+}
+
+/* Style the chat window and thread */
+.window-container {
+  flex: 1; /* Take full height of channel container */
+  overflow-y: auto; /* Enable scrolling if chat messages overflow */
+}
+
+/* Optional: Style for loading image */
+.loading {
+  display: block;
+  margin: auto; /* Center the loading image */
+}
+
+/* Additional styles as per your design */
+
+.str-chat__channel-list,
+.str-chat.messaging, .str-chat.commerce,
+.str-chat__channel-list-messenger{
+  background-color: #ffffff;
+}
+
+.str-chat-channel.messaging .str-chat__main-panel{
+  padding: 2%;
+}
+
+.str-chat__input-flat .str-chat__textarea>textarea{
+  text-align: center;
+}
+

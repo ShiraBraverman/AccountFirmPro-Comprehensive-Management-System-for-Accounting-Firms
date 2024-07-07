@@ -1,0 +1,11 @@
+# Dependency directories
+/Server/node_modules/
+/Server/dist
+/Client/node_modules/
+/Client/dist
+
+# Environment files
+/Server/.env
+/Server/log.txt
+/Server/southern-waters-425513-d6-3bb59649cf3c.json
+/Server/client_secret_630012140836-69era2lj0qu3j7lpnb1q02s11q876re1.apps.googleusercontent.com.json

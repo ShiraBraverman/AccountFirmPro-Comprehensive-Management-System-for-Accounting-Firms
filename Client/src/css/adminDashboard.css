@@ -1,0 +1,274 @@
+.main-content {
+  width: 70%;
+}
+
+.side-content {
+  justify-content: center;
+  align-items: center;
+  width: 30%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.deleteConnectionContainer,
+.addConnectionContainer {
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.admin-dashboard {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.clients-list,
+.employees-list {
+  width: 45%;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.clients-list {
+  align-items: flex-end;
+  margin-right: 33vw; /* רווח של שליש מרוחב המסך */
+}
+
+.employees-list {
+  align-items: flex-start;
+}
+
+.clients-list ul,
+.employees-list ul {
+  list-style-type: none;
+  padding: 0;
+  flex: 1; /* הוספת פרמטר זה על מנת לקבוע את הגובה */
+}
+
+.clients-list li,
+.employees-list li {
+  display: flex;
+  align-items: center;
+  /* margin-bottom: 10px; */
+}
+
+.circle-button {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: 10px;
+  margin-left: 10px;
+}
+
+.clients-list a,
+.employees-list a {
+  color: #333;
+  text-decoration: none;
+}
+
+.clients-list a:hover,
+.employees-list a:hover {
+  text-decoration: underline;
+}
+
+.relationship-line {
+  position: absolute;
+  border: 1px solid; /* המסגרת תשתנה בהתאם לצבע שהוגרל */
+  z-index: -1;
+}
+
+.content-container {
+  display: flex;
+  justify-content: space-between;
+  flex-grow: 1;
+  margin-bottom: 20px;
+}
+
+.reset-button-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  position: sticky;
+  top: 0;
+  /* z-index: 999; */
+  margin-bottom: 20px;
+}
+
+.reset-button {
+  padding: 10px 20px;
+  background-color: #007bff; /* צבע רקע */
+  color: white; /* צבע טקסט */
+  border: none;
+  border-radius: 5px; /* רדיוס פינות */
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* צל */
+  transition: background-color 0.3s ease; /* אנימציה של שטיפה */
+}
+
+.reset-button:hover {
+  background-color: #0056b3; /* צבע רקע בעת עכבה */
+}
+
+.delete-button {
+  width: fit-content;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid #cccccc;
+  border-radius: 4px;
+  padding: 10px 10px;
+  margin: 15px;
+  /* width: 300px; */
+  background-color: white;
+}
+
+.delete-button:hover {
+  background-color: #c82333;
+}
+
+.search-container {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid #cccccc;
+  border-radius: 4px;
+  padding: 10px 10px;
+  margin: 15px;
+  width: 300px;
+  background-color: white;
+}
+
+.search-input {
+  justify-content: center;
+  align-items: center;
+  border: none;
+  outline: none;
+  width: 100%;
+}
+
+.search-input::placeholder {
+  color: #999;
+}
+
+.search-results {
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1000;
+  width: 300px;
+  max-height: 200px;
+  overflow-y: auto;
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 0 0 5px 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  display: block;
+  padding: 0;
+  margin: 0;
+  margin-bottom: 2%;
+}
+
+.search-result {
+  padding: 8px;
+  cursor: pointer;
+  font-size: 16px;
+  color: #666;
+}
+
+.search-result:hover {
+  background-color: #f0f0f0;
+}
+
+.div_to_delete {
+  justify-content: center;
+  align-items: center;
+  margin-right: auto;
+  margin-left: auto;
+}
+
+.search_div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto; /* מרכז אופקית */
+  margin-bottom: 20px;
+  width: 100%; /* לוודא שהוא ממלא את רוחב המיכל הראשי */
+}
+
+.search-bar {
+  display: flex;
+  align-items: center;
+  border: 1px solid #cccccc;
+  border-radius: 4px;
+  padding: 10px 10px;
+  background-color: white;
+  width: 300px; /* רוחב התיבה */
+}
+
+.search-bar input {
+  border: none;
+  outline: none;
+  width: 100%;
+}
+
+li {
+  cursor: pointer;
+}
+
+.content-container-second {
+  justify-content: flex-start; /* מתחיל למעלה */
+  align-items: center; /* מיישר במרכז אופקית */
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  padding-top: 5%; /* שולט בכמה התוכן יהיה מהחלק העליון */
+}
+
+/* Media query for small screens */
+@media (max-width: 768px) {
+  .admin-dashboard {
+    flex-direction: column;
+  }
+
+  .main-content,
+  .side-content {
+    width: 100%;
+  }
+
+  .clients-list,
+  .employees-list {
+    width: 100%;
+    align-items: center;
+  }
+
+  .content-container-second {
+    width: 100%;
+  }
+}
+
+
+.modal {
+  top: 50% !important;
+  left: 50% !important;
+  transform: translate(-50%, -50%) !important;
+  z-index: var(--mdb-modal-zindex);
+  /* width: auto !important; */
+  max-width: 80%; /* Adjust as needed */
+  height: auto !important;
+  max-height: 80% !important; /* Adjust as needed */
+  /* overflow-x: hidden !important; */
+  /* overflow-y: auto ; Allow vertical scrolling if content overflows */
+  outline: 0;
+  display: block !important;
+}
