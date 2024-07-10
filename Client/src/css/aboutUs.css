@@ -1,0 +1,165 @@
+.about_us {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.content-wrapper {
+  flex: 1 0 auto;
+  padding-bottom: 2%; /* מרווח לפוטר */
+}
+
+.footer {
+  flex-shrink: 0;
+  padding: 0;
+  text-align: center;
+  width: 100%;
+  margin-top: 300px;
+}
+
+.buttomtext {
+  margin: 10px 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.vectorIcon10 {
+  margin-right: 10px;
+}
+
+.header1 {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  /* margin-bottom: 20px; */
+}
+
+.nav-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.text-content h1 {
+  color: #0056b3;
+  margin-bottom: 20px;
+}
+
+.office-image {
+  top: 0;
+  right: 0;
+  width: 100%;
+  /* height: 100%;  */
+}
+
+.logo {
+  height: 100px;
+}
+
+.services-column {
+  text-align: right;
+}
+
+.services-column p {
+  font-size: 14px;
+  color: #333;
+  margin: 5px 0;
+  position: relative;
+  padding-right: 20px;
+}
+
+.services-column p::before {
+  content: "✓";
+  color: #007bff;
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+
+.lilist {
+  margin-left: 70px !important;
+  width: 100%;
+  font-size: 1.2em;
+}
+
+.contact-form {
+  background-color: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+ }
+
+.contact-form h2 {
+  color: #0056b3;
+  margin-bottom: 20px;
+}
+
+.contact-form .mdb-input {
+  margin-bottom: 20px;
+}
+.contact-form .mdb-btn {
+  background-color: #0056b3;
+  color: white;
+  width: 100%;
+}
+
+.error {
+  color: red;
+  margin-top: 10px;
+}
+
+.nav-btn.square-btn {
+  font-size: 1.2rem; 
+  margin: 0 10px;
+}
+
+.h1,
+.pAbout {
+  font-size: 0.8em; 
+  font-weight: bold;
+  margin-right: 10px;
+  margin-left: 50px;
+  text-align: right;
+}
+
+.piska{
+  text-align: right;
+  margin-bottom: 0;
+
+}
+.mtmargim
+{
+  margin-top: 3% !important
+}
+
+.services-list {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  margin-right: 100px;
+}
+
+.contact-form .mdb-input,
+.contact-form .mdb-btn {
+  margin-bottom: 15px; 
+}
+
+.contact-form .mdb-btn {
+  margin-top: 20px;
+}
+
+.contact-form .mdb-btn {
+  font-size: 1.2rem;
+}
+
+.margin {
+  margin-top: 2%;
+}
+
+.ripple,
+.ripple-surface,
+.btn,
+.btn-primary {
+  margin-top: 5%;
+} 

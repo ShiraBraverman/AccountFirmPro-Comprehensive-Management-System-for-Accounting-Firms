@@ -22,7 +22,7 @@ const createChatChannel = async (
     try {
       if (newChatId && userId) {
         const members = chatMembers;
-        const channel = chatClient.channel("messaging", `chat-${newChatId}`, {
+        const channel = chatClient.channel("messaging", `c-${newChatId}`, {
           members: members,
           name: name,
           description:
@@ -58,7 +58,6 @@ const saveCurrentChat = async (chatId) => {
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
-    // console.log("User details saved successfully");
   } catch (error) {
     console.error("Error saving user details:", error.message);
   }
@@ -71,12 +70,9 @@ const getApiKey = async () => {
       headers: { "Content-Type": "application/json" },
       credentials: "include",
     });
-    // console.log(data);
     if (!data) {
     } else {
       const [apiKey] = await data.json();
-      // console.log("apiKey");
-      // console.log(apiKey);
       return apiKey;
     }
   } catch (err) {
@@ -97,8 +93,6 @@ const getChatMembers = async (userId) => {
       return response.json();
     })
     .then((data) => {
-      // const chat = data.json();
-      // console.log(data[0]);
       members = data[0];
     });
   return members;
@@ -146,7 +140,6 @@ const createChatID = async (fileID, userId) => {
   return chat;
 };
 
-// פונקציה לקבלת כל הצ'אטים
 const getAllChats = async (chatClient) => {
   try {
     const filters = { members: { $in: [`user-20`] } };
@@ -159,16 +152,14 @@ const getAllChats = async (chatClient) => {
   }
 };
 
-// פונקציה למחיקת צ'אט
 const deleteChat = async (chatClient, channelId) => {
   const channel = chatClient.channel("messaging", channelId);
   await channel.delete();
 };
 
-// פונקציה למחיקת כל הצ'אטים
 const deleteAllChats = async (chatClient, userId, userToken) => {
   try {
-    const channels = await getAllChats(chatClient, `user-21`, userToken);
+    const channels = await getAllChats(chatClient, `user-20`, userToken);
     console.log(channels);
     for (const channel of channels) {
       await deleteChat(chatClient, channel.id, userToken);
@@ -186,10 +177,8 @@ const getUnreadMessagesForChat = async (chatsInfo, fileID, userID) => {
     }
 
     const myChat = await getChatID(fileID, userID);
-    const chat = chatsInfo.find(
-      (chat) => chat.chatId === `chat-${myChat.id}`
-    );
-
+    const chat = chatsInfo.find((chat) => chat.chatId === `c-${myChat.id}`);
+ 
     if (!chat) {
       return -1;
     }
@@ -216,22 +205,18 @@ const getChatsWithUnreadMessages = async (chatsInfo) => {
 
 const updateChatDescriptionForFile = async (chatClient, file, owner) => {
   try {
-    // קבלת ה- chat ID עבור הקובץ
     const chatData = await getChatID(file.id, file.clientID);
     if (!chatData) {
       console.log("No chat ID found for this file");
       return;
     }
-    console.log("change description");
-    console.log(chatData);
-    await chatClient.channel("messaging", `chat-${chatData.id}`).update({
+    await chatClient.channel("messaging", `c-${chatData.id}`).update({
       name: file.name,
       description:
         file && file.createdAt
           ? `Type: ${file.type}, Status: ${file.status}, Created: ${file.createdAt}, Owner: ${owner}, Remark: ${file.remark}`
           : "no description",
     });
-    console.log("description changed");
   } catch (error) {
     console.error("Error updating chat description for file:", error);
   }
@@ -245,4 +230,5 @@ export default {
   getChatsWithUnreadMessages,
   getChatID,
   updateChatDescriptionForFile,
+  saveCurrentChat
 };

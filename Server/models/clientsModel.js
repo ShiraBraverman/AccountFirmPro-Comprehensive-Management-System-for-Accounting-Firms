@@ -2,7 +2,7 @@ const pool = require("../DB.js");
 
 async function getClientByCkientId(id) {
   try {
-    const sql = `SELECT name from clients left join users on clients.userID = users.id where clients.id = ?`;
+    const sql = `SELECT name from users where id = ?`;
     const result = await pool.query(sql, [id]);
     return result;
   } catch (err) {

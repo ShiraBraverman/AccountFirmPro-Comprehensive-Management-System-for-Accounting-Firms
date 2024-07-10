@@ -1,8 +1,7 @@
 import React, { createContext, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { StreamChat } from "stream-chat";
-import axios from "axios";
-import chanels from "./helpers/chanels";
+import { toast } from "react-hot-toast";
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
@@ -11,11 +10,14 @@ export const AuthProvider = ({ children }) => {
   const [apiKey, setApiKey] = useState(null);
   const [clientReady, setClientReady] = useState(false);
   const [chatsInfo, setChatsInfo] = useState([]);
-  const [files, setFiles] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
-    return disconnectClient;
+    return () => {
+      if (chatClient) {
+        chatClient.disconnectUser();
+      }
+    };
   }, []);
 
   useEffect(() => {
@@ -37,15 +39,15 @@ export const AuthProvider = ({ children }) => {
   }, [user, chatClient]);
 
   useEffect(() => {
-    if (clientReady) {
+    if (user && user.id && clientReady) {
       chatsData();
     }
   }, [clientReady, user]);
 
   const chatsData = async () => {
     await fetchAllChatsInfo();
-    // await loadFilesAndUpdateChats(user.id);
   };
+
   const disconnectClient = async () => {
     if (clientReady) {
       chatClient.disconnectUser();
@@ -65,16 +67,21 @@ export const AuthProvider = ({ children }) => {
   };
 
   const fetchAllChatsInfo = async () => {
-    if (!clientReady || !chatClient || !user) return;
-
     try {
       const filters = { members: { $in: [`user-${user.id}`] } };
       const sort = { last_message_at: -1 };
-      const channels = await chatClient.queryChannels(filters, sort, {});
+      const channels = await chatClient.queryChannels(filters, sort, {
+        limit: 15,
+        state: true,
+        watch: true,
+        presence: true,
+      });
 
       const allChatsInfo = await Promise.all(
         channels.map(async (channel) => {
-          const messages = await channel.query({ messages: { limit: 500 } });
+          const messages = await channel.query({
+            messages: { limit: 100, state: true, watch: true, presence: true },
+          });
 
           const userMessagesCount = messages.messages.filter(
             (message) => message.user.id === `user-${user.id}`
@@ -100,79 +107,12 @@ export const AuthProvider = ({ children }) => {
           };
         })
       );
-      console.log(allChatsInfo);
+      console.log(allChatsInfo)
       setChatsInfo(allChatsInfo);
-      // loadFilesAndUpdateChats(allChatsInfo, user.id);
-    } catch (error) {
-      console.error("Error fetching chats info:", error);
+    } catch (err) {
+      toasting("error", err.message? err.message: err);
     }
   };
-
-  // const loadFilesAndUpdateChats = async (chatsInfo, ownerOfFiles) => {
-  //   try {
-  //     const types = [
-  //       "Current material for accounting",
-  //       "Material for an annual report",
-  //       "Approvals, tax coordination and miscellaneous",
-  //       "Reports and information to download",
-  //     ];
-
-  //     let allFiles = [];
-  //     for (const typeFile of types) {
-  //       const response = await axios.get(`http://localhost:3000/files`, {
-  //         params: {
-  //           userID: ownerOfFiles,
-  //           typeFile: typeFile,
-  //         },
-  //         withCredentials: true,
-  //         headers: { "Content-Type": "application/json" },
-  //       });
-
-  //       allFiles = [...allFiles, ...response.data];
-  //     }
-  //     setFiles(allFiles);
-
-  //     if (allFiles.length === 0) {
-  //       console.log("This client has no files");
-  //     } else {
-  //       const filesWithChatIDs = await Promise.all(
-  //         allFiles.map(async (file) => {
-  //           const chatData = await chanels.getChatID(file.id, ownerOfFiles);
-  //           return { ...file, chatId: chatData ? chatData.id : null };
-  //         })
-  //       );
-  //       const updatedChatsInfo = chatsInfo.map((chat) => {
-  //         const matchingFile = filesWithChatIDs.find(
-  //           (file) => `myChat-${file.chatId}` === chat.chatId
-  //         );
-  //         if (matchingFile) {
-  //           return {
-  //             ...chat,
-  //             chatName: matchingFile.name || chat.chatName,
-  //             description: `File Type: ${matchingFile.type}, Size: ${matchingFile.size}, Created: ${matchingFile.createdAt}`,
-  //           };
-  //         }
-  //         return chat;
-  //       });
-
-  //       setChatsInfo(updatedChatsInfo);
-
-  //       for (const chat of updatedChatsInfo) {
-  //         if (chat.description) {
-  //           const chat1 = await chatClient
-  //             .channel(chat.chatType, chat.chatId)
-  //             .update({
-  //               name: chat.chatName,
-  //               description: chat.description,
-  //             });
-  //         }
-  //       }
-
-  //     }
-  //   } catch (error) {
-  //     console.error("Error loading files and updating chats:", error);
-  //   }
-  // };
 
   const getApiKey = async () => {
     try {
@@ -186,7 +126,7 @@ export const AuthProvider = ({ children }) => {
         setApiKey(apiKey);
       }
     } catch (err) {
-      console.log(err);
+      toasting("error", err.message? err.message: err);
     }
   };
 
@@ -241,17 +181,17 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  const signUp = async (userName, password, employeType, role) => {
+  const signUp = async (userName, password, employeeType, userRole) => {
     try {
       const response = await fetch(`http://localhost:3000/signUp`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include",
-        body: JSON.stringify({ userName, password, employeType, role }),
+        body: JSON.stringify({ userName, password, employeeType, userRole }),
       });
       const data = await response.json();
       if (response.ok) {
-        navigate("./updates");
+        throw new Error("User successfully created");
       } else {
         throw new Error(data.message || "An error occurred. Please try again.");
       }
@@ -279,6 +219,14 @@ export const AuthProvider = ({ children }) => {
     navigate("/aboutUs");
   };
 
+  const toasting = async (type, message) => {
+    switch (type) {
+      case "error":
+        toast.error(message.message ? message.message : message);
+        break;
+    }
+  };
+
   return (
     <AuthContext.Provider
       value={{
@@ -290,6 +238,7 @@ export const AuthProvider = ({ children }) => {
         chatClient,
         clientReady,
         chatsInfo,
+        toasting,
       }}
     >
       {user === undefined ? null : children}

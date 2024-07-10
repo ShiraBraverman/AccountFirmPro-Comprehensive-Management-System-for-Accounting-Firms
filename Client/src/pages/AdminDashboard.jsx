@@ -1,8 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import "../css/adminDashboard.css";
-import AddConnection from "../components/addConnection";
-import DeleteConnection from "../components/deleteConnection";
+import AddConnection from "../components/AddConnection";
+import DeleteConnections from "../components/DeleteConnections";
 import { FaSearch } from "react-icons/fa";
+import { useTranslation } from "react-i18next";
+import { AuthContext } from "../AuthContext";
 
 const AdminDashboard = () => {
   const [clients, setClients] = useState([]);
@@ -21,6 +23,8 @@ const AdminDashboard = () => {
   const [widthChanged, setWidthChanged] = useState(false);
   const [onChange, setOnChange] = useState(false);
   const [searchCriteria, setSearchCriteria] = useState("");
+  const { t } = useTranslation();
+  const { toasting } = useContext(AuthContext);
 
   useEffect(() => {
     window.addEventListener("resize", handleResize);
@@ -109,6 +113,14 @@ const AdminDashboard = () => {
     makeLines();
   }, [currentClientsemployees, employeeColors]);
 
+  useEffect(() => {
+    if (isModalOpenAdd || isModalOpenDelete)
+      document
+        .querySelectorAll(".relationship-line")
+        .forEach((line) => line.remove());
+    if (!isModalOpenAdd && !isModalOpenDelete) makeLines();
+  }, [isModalOpenAdd, isModalOpenDelete]);
+
   const fetchClients = async () => {
     try {
       const response = await fetch("http://localhost:3000/clients/clients", {
@@ -125,7 +137,10 @@ const AdminDashboard = () => {
       setClients(data);
       setCurrentClients(data);
     } catch (error) {
-      console.error("Error fetching clients:", error.message);
+      toasting(
+        "error",
+        "Error fetching clients:" + error.message ? error.message : error
+      );
     }
   };
 
@@ -148,7 +163,10 @@ const AdminDashboard = () => {
       setEmployees(data);
       setCurrentEmployees(data);
     } catch (error) {
-      console.error("Error fetching employees:", error.message);
+      toasting(
+        "error",
+        "Error fetching employees:" + error.message ? error.message : error
+      );
     }
   };
 
@@ -168,7 +186,10 @@ const AdminDashboard = () => {
       setClientsemployees(data);
       setCurrentClientsemployees(data);
     } catch (error) {
-      console.error("Error fetching employees:", error.message);
+      toasting(
+        "error",
+        "Error fetching employees:" + error.message ? error.message : error
+      );
     }
   };
 
@@ -208,7 +229,7 @@ const AdminDashboard = () => {
             relationshipLine.style.width = `${length}px`;
             relationshipLine.style.transform = `rotate(${angle}deg)`;
             relationshipLine.style.transformOrigin = "0 0";
-            relationshipLine.style.zIndex = "3";
+            relationshipLine.style.zIndex = "0";
             relationshipLine.style.backgroundColor = getEmployeeColor(
               employee.userID
             );
@@ -244,7 +265,7 @@ const AdminDashboard = () => {
       Math.random() < 0.5
         ? Math.floor(Math.random() * 128)
         : 128 + Math.floor(Math.random() * 128);
-    return `rgb(${getByte()}, ${getByte()}, ${getByte()}, 0.1)`;
+    return `rgb(${getByte()}, ${getByte()}, ${getByte()}, 0.5)`;
   };
 
   const getEmployeeMargin = () => {
@@ -314,14 +335,13 @@ const AdminDashboard = () => {
         {(selectedClient || selectedEmployee) && (
           <div className="reset-button-container">
             <button onClick={handleResetClick} className="reset-button">
-              Show All
+              {t("Show All")}
             </button>
           </div>
         )}
         <div className="search_div">
           <div className="search-bar">
             <FaSearch />
-            {/* <label className="input">Search:</label> */}
             <input
               type="text"
               value={searchCriteria}
@@ -332,7 +352,7 @@ const AdminDashboard = () => {
         </div>
         <div className="content-container">
           <div className="clients-list">
-            <h3>Clients</h3>
+            <h3>{t("Clients")}</h3>
             <ul>
               {currentClients.map((client) => (
                 <li
@@ -358,7 +378,7 @@ const AdminDashboard = () => {
             </ul>
           </div>
           <div className="employees-list">
-            <h3>Employees</h3>
+            <h3>{t("Employees")}</h3>
             <ul>
               {currentEmployees.map((employee) => (
                 <li
@@ -391,7 +411,7 @@ const AdminDashboard = () => {
         {selectedClient && <h2>{selectedClient.name}</h2>}
         {selectedEmployee && <h2>{selectedEmployee.name}</h2>}
         <div className="deleteConnectionContainer">
-          <DeleteConnection
+          <DeleteConnections
             selectedClient={selectedClient}
             selectedEmployee={selectedEmployee}
             triyngToDelete={triyngToDelete}
@@ -413,6 +433,7 @@ const AdminDashboard = () => {
             employees={employees}
             currentEmployees={currentEmployees}
             isModalOpenAdd={isModalOpenAdd}
+            isModalOpenDelete={isModalOpenDelete}
             setIsModalOpenAdd={setIsModalOpenAdd}
             onChange={onChange}
             setOnChange={setOnChange}

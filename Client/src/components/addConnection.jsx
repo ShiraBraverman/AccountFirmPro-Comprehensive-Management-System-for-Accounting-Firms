@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
 import Modal from "react-modal";
 import { FaSearch } from "react-icons/fa";
+import { useTranslation } from "react-i18next";
 
-const addConnection = ({
+const AddConnection = ({
   selectedClient,
   selectedEmployee,
   clients,
@@ -10,6 +11,7 @@ const addConnection = ({
   employees,
   currentEmployees,
   isModalOpenAdd,
+  isModalOpenDelete,
   setIsModalOpenAdd,
   onChange,
   setOnChange,
@@ -17,6 +19,7 @@ const addConnection = ({
   const [searchTerm, setSearchTerm] = useState("");
   const [searchResults, setSearchResults] = useState([]);
   const [triyngToAdd, setTriyngToAdd] = useState(null);
+  const { t } = useTranslation();
 
   useEffect(() => {
     setSearchTerm("");
@@ -73,11 +76,9 @@ const addConnection = ({
         setOnChange(!onChange);
         handleModalClose();
       } else {
-        // console.log(response);
         handleModalClose();
       }
     } catch (error) {
-      // console.log(error);
       handleModalClose();
     }
     handleModalClose();
@@ -101,19 +102,21 @@ const addConnection = ({
             value={searchTerm}
             className="search-input"
           />
-          {searchResults.length > 0 && (
-            <ul className="search-results visible">
-              {searchResults.map((item) => (
-                <li
-                  className="search-result"
-                  key={item.userID}
-                  onClick={() => handleSearchItemClick(item)}
-                >
-                  {item.name}
-                </li>
-              ))}
-            </ul>
-          )}
+          {!isModalOpenAdd &&
+            !isModalOpenDelete &&
+            searchResults.length > 0 && (
+              <ul className="search-results visible">
+                {searchResults.map((item) => (
+                  <li
+                    className="search-result"
+                    key={item.userID}
+                    onClick={() => handleSearchItemClick(item)}
+                  >
+                    {item.name}
+                  </li>
+                ))}
+              </ul>
+            )}
         </div>
       )}
       <Modal
@@ -123,15 +126,15 @@ const addConnection = ({
         className="modal"
         overlayClassName="overlay"
       >
-        <h2>Confirm Connection Addition</h2>
+        <h2> {t("Confirm Connection Addition")}</h2>
         <p>
-          Are you sure you want to add the connection between{" "}
+          {t("Are you sure you want to add the connection between")}
           <strong>
             {selectedClient
               ? selectedClient.name
               : triyngToAdd && triyngToAdd.name}
           </strong>
-          and
+          {t("and")}
           <strong>
             {selectedEmployee
               ? selectedEmployee.name
@@ -140,12 +143,12 @@ const addConnection = ({
           ?
         </p>
         <button onClick={handleConfirmAdd} autoFocus>
-          Yes
+          {t("Yes")}
         </button>
-        <button onClick={handleModalClose}>No</button>
+        <button onClick={handleModalClose}> {t("No")}</button>
       </Modal>
     </div>
   );
 };
 
-export default addConnection;
+export default AddConnection;

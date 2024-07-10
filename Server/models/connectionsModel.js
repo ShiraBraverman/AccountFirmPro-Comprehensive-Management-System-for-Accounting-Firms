@@ -33,7 +33,6 @@ async function deleteConnection(employeeID, clientID) {
   }
 }
 
-
 async function getClientIDOrEmployeeIDByUserID(userID) {
     try {
       const sql =
@@ -44,9 +43,8 @@ async function getClientIDOrEmployeeIDByUserID(userID) {
     } catch (err) {
       throw err;
     }
-  }
+}
   
-
 module.exports = {
   getConnections,
   createConnection,

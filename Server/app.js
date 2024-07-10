@@ -5,6 +5,7 @@ const cookieParser = require("cookie-parser");
 const cron = require("node-cron");
 require("dotenv").config();
 
+const checkAbilities = require("./Middlewares/checkAbilities");
 const emailRoute = require("./routes/emailRoute");
 const signInRoute = require("./routes/signInRoute");
 const signUpRoute = require("./routes/signUpRoute");
@@ -43,16 +44,16 @@ app.use(
 app.use(logger);
 app.use("/sendEmail", emailRoute);
 app.use("/signIn", signInRoute);
+app.use("/logout", logoutRoute);
 app.use(checkAuth);
 app.use("/signUp", signUpRoute);
 app.use("/files", filesRoute);
-app.use("/logout", logoutRoute);
 app.use("/users", usersRoute);
-app.use("/myClient", myClientRoute);
-app.use("/chat", chatsRoute);
+app.use("/chat", checkAbilities("create", "Chat"), chatsRoute);
+app.use("/myClient", checkAbilities("read", "Clients"), myClientRoute);
 app.use("/clients", clientsRoute);
-app.use("/connections", connectionsRoute);
-app.use("/employees", employeesRoute);
+app.use( "/connections", checkAbilities("create", "employees"), connectionsRoute);
+app.use("/employees", checkAbilities("create", "employees"), employeesRoute);
 
 app.use("/checkAuth", (req, res) => {
   res.status(200).json(req.session.user);

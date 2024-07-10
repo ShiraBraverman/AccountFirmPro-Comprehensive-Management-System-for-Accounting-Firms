@@ -8,7 +8,6 @@ require("dotenv").config();
 async function getClientByCkientId(id) {
   try {
     const user = await model.getClientByCkientId(id);
-    // console.log(clientsEmployee[0]);
     return user[0];
   } catch (err) {
     throw err;
@@ -19,7 +18,6 @@ async function getManagers(id) {
   try {
     const managers = await model.getManagers();
     const employees = await model.getEmployeesOfClient(id);
-    // console.log(clientsEmployee[0]);
     return [...employees[0], ...managers[0]];
   } catch (err) {
     throw err;
@@ -29,7 +27,6 @@ async function getManagers(id) {
 async function getClientIDOrEmployeeIDByUserID(id) {
   try {
     const type = await model.getClientIDOrEmployeeIDByUserID(id);
-    // console.log(clientsEmployee[0]);
     return type[0];
   } catch (err) {
     throw err;
@@ -47,7 +44,7 @@ async function getById(id) {
 
     if (user) {
       const abilities = defineAbilitiesFor(user.role);
-      const { password, ...userWithoutPassword } = user; // במקרה שמידע הסיסמה קיים ויש להוציאו מהתשובה
+      const { password, ...userWithoutPassword } = user;
       return { ...userWithoutPassword, abilities };
     } else {
       throw new Error("User not found");
@@ -72,19 +69,16 @@ async function create(userName, password, employeType, role) {
     const serverClient = StreamChat.getInstance(apiKey, apiSecret);
 
     try {
-      // console.log("response.insertId");
-      // console.log(response.insertId);
       await serverClient.upsertUser({
         id: `user-${response.insertId}`,
         name: userName,
-        // role: "admin"
+        role: "admin"
       });
     } catch (streamError) {
       throw new Error(`Stream Chat Error: ${streamError.message}`);
     }
 
     const myToken = serverClient.createToken(`user-${response.insertId}`);
-    // console.log(myToken);
     model.updateStreamToken(myToken, response.insertId);
 
     return { userID: response.insertId };
@@ -123,16 +117,7 @@ async function getByPasswordAndUserName(password, userName) {
 
 async function update(id, userName, name, email, phone, street, city, zipcode) {
   try {
-    const user = await model.updateUser(
-      id,
-      userName,
-      name,
-      email,
-      phone,
-      street,
-      city,
-      zipcode
-    );
+    const user = await model.updateUser(id, userName, name, email, phone, street, city, zipcode);
     return user;
   } catch (err) {
     throw err;

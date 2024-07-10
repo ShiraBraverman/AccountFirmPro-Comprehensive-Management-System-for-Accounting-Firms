@@ -3,24 +3,17 @@ import { FaDownload } from "react-icons/fa";
 import { MdDeleteForever } from "react-icons/md";
 import { FaComments } from "react-icons/fa";
 import { FaPencil } from "react-icons/fa6";
-import { AuthContext } from "../AuthContext";
 import axios from "axios";
 import { MdDelete } from "react-icons/md";
 import { useDrag } from "react-dnd";
 import { useNavigate } from "react-router-dom";
 import "../css/file.css";
 import chanels from "../helpers/chanels";
-
 import { MDBBadge } from "mdb-react-ui-kit";
+import { useTranslation } from "react-i18next";
+import { AuthContext } from "../AuthContext";
 
-const File = ({
-  file,
-  searchCriteria,
-  filesChanged,
-  setFilesChanged,
-  ownerOfFiles,
-  userToken,
-}) => {
+const File = ({ file, searchCriteria, filesChanged, setFilesChanged }) => {
   const navigate = useNavigate();
   const { user, chatClient, chatsInfo } = useContext(AuthContext);
   const [remark, setRemark] = useState(file.remark || "");
@@ -30,10 +23,10 @@ const File = ({
   const [selectedStatus, setSelectedStatus] = useState("");
   const [uplodersName, setUplodersName] = useState(file.remark || "");
   const [ownerName, setOwnerName] = useState(file.remark || "");
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [messages, setMessages] = useState(-1);
   const remarkRef = useRef(null);
   const selectRef = useRef(null);
+  const { t } = useTranslation();
 
   const [{ isDragging }, drag] = useDrag(() => ({
     type: "FILE",
@@ -52,7 +45,6 @@ const File = ({
         !event.target.classList.contains("file-status")
       ) {
         setShowStatus(false);
-        setIsDropdownOpen(false);
       }
       if (remarkRef.current && !remarkRef.current.contains(event.target)) {
         setIsEditing(false);
@@ -80,7 +72,7 @@ const File = ({
       if (messages == -1) return;
       else setMessages(messages);
     } catch (error) {
-      console.error("Error fetching messages:", error);
+      toasting("error" , "Error fetching messages:" + error.message ? error.message : error );
     }
   };
 
@@ -138,7 +130,7 @@ const File = ({
       // Revoke URL
       window.URL.revokeObjectURL(url);
     } catch (error) {
-      console.error("Error downloading file:", error.message);
+      toasting("error" , "Error downloading file:" + error.message ? error.message : error );
     }
   };
 
@@ -156,7 +148,6 @@ const File = ({
         return response;
       })
       .then((data) => {
-        changeDesciptionInChats();
         setFilesChanged(!filesChanged);
         return;
       });
@@ -186,11 +177,6 @@ const File = ({
 
   const commentsFunc = async () => {
     try {
-      // const chanel1 = await chanels.deleteAllChats(
-      // chatClient,
-      // user.id,
-      // user.streamToken
-      // );
       await chanels.createChatChannel(
         chatClient,
         file.id,
@@ -200,16 +186,9 @@ const File = ({
         ownerName
       );
       navigate(`../chats/${file.id}`);
-    } catch (err) {
-      console.log(err);
-    }
-  };
+    } catch (error) {
+      toasting("error" , error.message ? error.message : error );
 
-  const changeDesciptionInChats = async () => {
-    try {
-      await chanels.updateChatDescriptionForFile(chatClient, file, ownerName);
-    } catch (err) {
-      console.log(err);
     }
   };
 
@@ -231,10 +210,7 @@ const File = ({
         return response;
       })
       .then((data) => {
-        // console.log(filesChanged)
         setFilesChanged(!filesChanged);
-        changeDesciptionInChats();
-        // setIsEditing(!isEditing);
       });
   };
 
@@ -332,7 +308,7 @@ const File = ({
           <div className="box">
             <div className="file-status-container">
               <div className="header">
-                <strong style={strongStyle}>status</strong>
+                <strong style={strongStyle}>{t("status")}</strong>
               </div>
               {!showStatus && (
                 <div
@@ -366,16 +342,16 @@ const File = ({
                 >
                   {user.role == "Client" && file.uploaderID != user.id && (
                     <>
-                      <option value={status}>Select status...</option>
-                      <option value="Approved">Approved</option>
+                      <option value={status}>{t("Select status...")}</option>
+                      <option value="Approved">{t("Approved")}</option>
                     </>
                   )}
                   {user.role != "Client" && (
                     <>
-                      <option value={status}>Select status...</option>
-                      <option value="Approved">Approved</option>
-                      <option value="Rejected">Rejected</option>
-                      <option value="Pending">Pending</option>
+                      <option value={status}>{t("Select status...")}</option>
+                      <option value="Approved">{t("Approved")}</option>
+                      <option value="Rejected">{t("Rejected")}</option>
+                      <option value="Pending">{t("Pending")}</option>
                     </>
                   )}
                 </select>
@@ -385,7 +361,7 @@ const File = ({
           <div className="box">
             <div className="file-comments">
               <div className="header">
-                <strong style={strongStyle}>remark</strong>
+                <strong style={strongStyle}>{t("remark")}</strong>
               </div>
               {isEditing && (
                 <input
@@ -405,7 +381,6 @@ const File = ({
                     <button
                       className="update"
                       onClick={() => {
-                        // changeRemarkInTheDB(),
                         changeRemark(), toggleEdit();
                       }}
                     >
@@ -419,14 +394,14 @@ const File = ({
           </div>
           <div className="box">
             <div className="header">
-              <strong style={strongStyle}>uploader</strong>
+              <strong style={strongStyle}>{t("uploader")}</strong>
               <br />
               {highlightSearchTerm(uplodersName, searchCriteria)}
             </div>
           </div>
           <div className="box">
             <div className="header">
-              <strong style={strongStyle}>owner</strong>
+              <strong style={strongStyle}>{t("owner")}</strong>
               <br />
               {highlightSearchTerm(ownerName, searchCriteria)}
             </div>
@@ -443,8 +418,7 @@ const File = ({
             {status !== "Deleted" ? (
               <button
                 className="delete btn-primary position-relative mx-3"
-                onClick={deleteFile}
-              >
+                onClick={deleteFile}>
                 <MdDelete />
               </button>
             ) : (
@@ -455,18 +429,11 @@ const File = ({
                 <MdDeleteForever />
               </button>
             )}
-            {/* <button className="comments" onClick={commentsFunc}>
-              <FaComments />
-            </button> */}
             <button
               type="comments"
               onClick={commentsFunc}
-              className=" btn-primary position-relative mx-3"
-              // style={{ backgroundColor: '#ac2bac' }}
-            >
+              className=" btn-primary position-relative mx-3">
               <FaComments />
-
-              {/* <i className='fab fa-instagram'></i> */}
               {messages != -1 && (
                 <MDBBadge
                   pill
@@ -474,7 +441,6 @@ const File = ({
                   className="position-absolute top-0 start-100 translate-middle"
                 >
                   {messages}
-                  {/*<span className='visually-hidden'>unread messages</span> */}
                 </MDBBadge>
               )}
             </button>

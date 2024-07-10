@@ -1,6 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { useDrop } from "react-dnd";
 import "../css/typeFile.css";
+import { useTranslation } from "react-i18next";
+import { AuthContext } from "../AuthContext";
+
 const TypeFile = ({
   typeFile,
   setCurrentTypeFile,
@@ -10,6 +13,8 @@ const TypeFile = ({
   isUploading,
 }) => {
   const [countOfType, setCountOfType] = useState(0);
+  const { toasting } = useContext(AuthContext);
+  const { t } = useTranslation();
 
   useEffect(() => {
     if (ownerOfFiles != null) {
@@ -45,8 +50,9 @@ const TypeFile = ({
         const countType = await data.json();
         setCountOfType(countType);
       }
-    } catch (err) {
-      console.log(err);
+    } catch (error) {
+      toasting("error" , error.message ? error.message : error );
+
     }
   };
 
@@ -63,7 +69,9 @@ const TypeFile = ({
         <strong>{typeFile}</strong>
       </button>
       <br />
-      <p className="num-files">{countOfType.count} files</p>
+      <p className="num-files">
+        {countOfType.count} {t("files")}
+      </p>
       <hr></hr>
     </div>
   );

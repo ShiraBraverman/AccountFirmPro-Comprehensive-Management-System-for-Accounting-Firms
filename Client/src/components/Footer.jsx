@@ -1,14 +1,18 @@
 import React from "react";
+import { MdOutlineMail } from "react-icons/md";
 
 function Footer() {
   return (
-    <footer>
-      {/* <a href="https://www.Pinterest.com" target="_blank"><img src="../images/pinterest.png"/></a>
-        <a href="https://www.telegram.com" target="_blank"><img src="../images/telegram.png"/></a>
-        <a href="https://www.twitter.com" target="_blank"><img src="../images/twitter.png"/></a>
-        <a href="https://www.facebook.com" target="_blank"><img src="../images/facebook.png"/></a>
-        <a href="https://www.instagram.com/denya.cafe/" target="_blank"><img src="../images/instagram.png"/></a> */}
-      <p className="buttomtext">Powered by Michal and Shira.</p>
+    <footer className="footer">
+      <p className="buttomtext">
+        02-6237600 <img className="vectorIcon10" alt="" src="../../src/pictures/phone.svg" />
+      </p>
+      <p className="buttomtext">
+        yael.b@c-b-cpa.co.il <MdOutlineMail />
+      </p>
+      <p className="buttomtext">
+        הכתובת: יעבץ 2, ירושלים <img className="vectorIcon10" alt="" src="../../src/pictures/globus.svg" />
+      </p>
     </footer>
   );
 }

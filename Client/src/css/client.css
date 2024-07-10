@@ -1,4 +1,92 @@
-.mydetails{
-    margin: 2%;
+.file-counts-modal{
+  max-width: 120%;
+  width: 120%;
+  /* height: 98vh; */
+  /* margin: 1.75rem auto; */
+}
+.file-counts-modal .modal-content {
+  /* height: 100%; */
 }
 
+.file-counts-modal .modal-body {
+  display: flex;
+  flex-direction: row;
+  overflow-y: hidden;
+  overflow-x: hidden;
+  justify-content: space-between;
+}
+
+.file-counts-modal .modal-body > div {
+  flex: 1;
+  margin: 0 10px;
+}
+
+.client {
+  display: flex;
+  align-items: center;
+  padding: 20px;
+  border: 9px solid #e0e0e0;
+  border-radius: 8px;
+  margin-bottom: 15px;
+  background-color: #bbe2ee;
+}
+
+.client h4 {
+  margin: 0;
+  font-size: 1.2rem;
+  flex-grow: 1;
+}
+
+.client .clientemail {
+  margin: 0 20px;
+  color: #666;
+  margin-top: 20px;
+  margin-bottom: 30px;
+}
+
+.client .button-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.client .button-row {
+  display: flex;
+  gap: 20px;
+}
+
+.client button {
+  flex: 1;
+  padding: 12px 16px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.2s;
+  font-size: 1.1rem;
+}
+
+.client button:hover {
+  opacity: 0.8;
+  transform: scale(1.05);
+}
+
+/* צבעים ספציפיים לכל כפתור */
+.client button.btn-primary {
+  background-color: #007bff;
+  color: white;
+}
+
+.client button.btn-secondary {
+  background-color: #6c757d;
+  color: white;
+}
+
+.client button.btn-info {
+  background-color: #17a2b8;
+  color: white;
+}
+
+.client button.btn-success {
+  background-color: #28a745;
+  color: white;
+}

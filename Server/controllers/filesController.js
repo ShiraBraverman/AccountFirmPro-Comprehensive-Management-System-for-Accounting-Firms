@@ -15,11 +15,17 @@ const auth = new google.auth.GoogleAuth({
   scopes: SCOPES,
 });
 
+function bufferToStream(buffer) {
+  const stream = new Readable();
+  stream._read = () => {};
+  stream.push(buffer);
+  stream.push(null);
+  return stream;
+}
+
 async function listFiles(userID, type) {
-  // console.log(type)
   try {
     let files;
-    // console.log(userID);
     const realID = await getClientIDOrEmployeeIDByUserID(userID);
     if (realID[0].client_id) {
       const result = await model.getFilesByClientID(userID, type);
@@ -39,15 +45,8 @@ async function listFiles(userID, type) {
   }
 }
 
-async function uploadFile(
-  uploaderID,
-  clientID,
-  uploadedFiles,
-  filesNames,
-  type
-) {
+async function uploadFile(uploaderID, clientID, uploadedFiles, filesNames, type) {
   try {
-    // const realclientID = await getClientIDOrEmployeeIDByUserID(clientID);
     for (const [index, file] of uploadedFiles.entries()) {
       if (file.mimetype !== "application/pdf") {
         throw new Error("Only PDF files are allowed");
@@ -60,7 +59,6 @@ async function uploadFile(
         uploaderID,
         clientID
       );
-      // console.log("saved");
     }
     return;
   } catch (error) {
@@ -92,14 +90,6 @@ async function uploadFileToDrive(fileBuffer, fileName) {
   }
 }
 
-function bufferToStream(buffer) {
-  const stream = new Readable();
-  stream._read = () => {};
-  stream.push(buffer);
-  stream.push(null);
-  return stream;
-}
-
 async function deleteAllFiles() {
   try {
     await deleteAllFilesInFolder("root");
@@ -117,15 +107,11 @@ async function deleteAllFilesInFolder(folderId) {
       fields: "files(id, name, mimeType)",
     });
     const files = response.data.files;
-    console.log("files");
-    console.log(files);
     for (const file of files) {
       if (file.mimeType === "application/vnd.google-apps.folder") {
-        // Recursively delete all contents of this folder
         await deleteAllFilesInFolder(drive, file.id);
       }
 
-      // Delete the file or folder
       try {
         await drive.files.delete({ fileId: file.id });
         console.log(`Deleted ${file.name} (${file.id})`);
@@ -149,28 +135,21 @@ async function deleteAllFilesInFolder(folderId) {
 async function downloadFile(res, fileId) {
   try {
     const drive = google.drive({ version: "v3", auth });
-
-    // Get file metadata
     const fileInfo = await drive.files.get({
       fileId: fileId,
       fields: "name, mimeType",
     });
-
     if (fileInfo.data.mimeType !== "application/pdf") {
       throw new Error("File is not a PDF");
     }
-
-    // Get file content as a stream
     const response = await drive.files.get(
       { fileId: fileId, alt: "media" },
       { responseType: "stream" }
     );
-
     res.setHeader(
       "Content-Disposition",
       `attachment; filename="${fileInfo.data.name}"`
     );
-
     return response;
   } catch (error) {
     throw error;
@@ -180,25 +159,17 @@ async function downloadFile(res, fileId) {
 async function viewFile(res, fileId) {
   try {
     const drive = google.drive({ version: "v3", auth });
-
-    // Get file metadata
     const fileInfo = await drive.files.get({
       fileId: fileId,
       fields: "name, mimeType",
     });
-
-    // Check if file is a PDF
     if (fileInfo.data.mimeType !== "application/pdf") {
       throw new Error("File is not a PDF");
     }
-
-    // Get file content as a stream
     const response = await drive.files.get(
       { fileId: fileId, alt: "media" },
       { responseType: "stream" }
     );
-
-    // Set headers to display the file inline
     res.setHeader("Content-Type", fileInfo.data.mimeType);
     res.setHeader(
       "Content-Disposition",
@@ -209,6 +180,7 @@ async function viewFile(res, fileId) {
     throw error;
   }
 }
+
 async function updateRemarkFile(id, remark) {
   try {
     const file = await model.updateRemarkFile(id, remark);
@@ -236,27 +208,6 @@ async function updateTypeFile(id, type) {
   }
 }
 
-async function numFilesPerMonth(userID, role) {
-  try {
-    let numFilesPerMonth;
-    if (role == "Admin") {
-      numFilesPerMonth = await model.numFilesPerMonthAdmin();
-      return numFilesPerMonth[0];
-    }
-    const realID = await getClientIDOrEmployeeIDByUserID(userID);
-    if (realID[0].client_id) {
-      const result = await model.numFilesPerMonthClient(userID);
-      numFilesPerMonth = result;
-    } else {
-      const result = await model.numFilesPerMonthEmployee(userID);
-      numFilesPerMonth = result;
-    }
-    return numFilesPerMonth[0];
-  } catch (err) {
-    throw err;
-  }
-}
-
 async function numFilesPerDay(userID, role) {
   try {
     let result;
@@ -269,10 +220,11 @@ async function numFilesPerDay(userID, role) {
       } else {
         result = await model.numFilesPerDayEmployee(userID);
       }
-    }
-
-    // מילוי תאריכים חסרים עם ערך 0
-    const filledData = fillMissingDates(result);
+    } 
+    const filledData = fillMissingDates(result.map((row) => ({
+      date: row.date.toISOString().split("T")[0],
+      count: row.count,
+    })));
     return filledData;
   } catch (err) {
     throw err;
@@ -352,7 +304,6 @@ async function numberFilesTypesAndStatus(userID, role) {
     });
 
     return Object.values(formattedResult);
-    // return numFiles[0];
   } catch (err) {
     throw err;
   }
@@ -379,6 +330,15 @@ async function getStatus(userID, role) {
   }
 }
 
+async function getPending(userID) {
+  try {
+    const result = await model.getPendingFilesByEmployee(userID);
+    return result[0];
+  } catch (err) {
+    throw err;
+  }
+}
+
 async function countTypeFile(type, userID) {
   try {
     const realID = await getClientIDOrEmployeeIDByUserID(userID);
@@ -397,24 +357,23 @@ async function countTypeFile(type, userID) {
   }
 }
 
-async function getFilesNumber(userID, role) {
+async function listIDsFiles(userID) {
   try {
-    let numFile;
-    if (role == "Admin") {
-      numFile = await model.getFilesNumberAdmin();
-      return numFile[0];
-    }
-    const realID = await getClientIDOrEmployeeIDByUserID(userID);
-    if (realID[0].client_id) {
-      const result = await model.getFilesNumberClient(userID);
-      numFile = result;
-    } else {
-      const result = await model.getFilesNumberEmployee(userID);
-      numFile = result;
-    }
-    return numFile[0];
-  } catch (err) {
-    throw err;
+    const files = await model.getFilesIDByClientID(userID);
+    const filteredFiles = files.filter((file) => file.id !== null);
+    return filteredFiles;
+  } catch (error) {
+    throw error;
+  }
+}
+
+async function listIDsFilesType(userID, type) {
+  try {
+    const files = await model.getFilesIDByClientIDType(userID, type);
+    const filteredFiles = files.filter((file) => file.id !== null);
+    return filteredFiles;
+  } catch (error) {
+    throw error;
   }
 }
 
@@ -424,14 +383,15 @@ module.exports = {
   uploadFile,
   deleteAllFiles,
   downloadFile,
+  listIDsFiles,
+  listIDsFilesType,
   viewFile,
   updateRemarkFile,
   updateStatusFile,
   updateTypeFile,
-  numFilesPerMonth,
+  getPending,
   getStatus,
   numberFilesTypes,
-  getFilesNumber,
   numberFilesTypesAndStatus,
   numFilesPerDay,
 };

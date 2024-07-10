@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState, useContext } from "react";
 import { useLocation } from "react-router";
-import { AuthContext } from "../AuthContext";
+import { AuthContext } from "../AuthContext.jsx";
 import { useDropzone } from "react-dropzone";
 import axios from "axios";
 import File from "../components/File";
@@ -13,34 +13,44 @@ import TypesFiles from "./TypesFiles.jsx";
 import { FaRegHandPointRight } from "react-icons/fa6";
 import { MdDelete } from "react-icons/md";
 import Modal from "react-modal";
-import chanel from "../helpers/chanels.js";
+import { toast } from "react-hot-toast";
+
+import { useTranslation } from "react-i18next";
+
 Modal.setAppElement("#root");
 
 function Files({ setIsUploading, isUploading }) {
   const location = useLocation();
-  const { user } = useContext(AuthContext);
+  const { user, toasting } = useContext(AuthContext);
   const [currentTypeFile, setCurrentTypeFile] = useState(null);
   const [ownerOfFiles, setOwnerOfFiles] = useState(null);
-  const [ownerOfFilesToken, setOwnerOfFilesToken] = useState(null);
   const [files, setFiles] = useState([]);
   const [showDrop, setShowDrop] = useState(false);
   const [uploadStatus, setUploadStatus] = useState(null);
   const [rejectedFiles, setRejectedFiles] = useState([]);
   const [serverFiles, setServerFiles] = useState([]);
   const [filesChanged, setFilesChanged] = useState(false);
-  const [searchCriteria, setSearchCriteria] = useState("");
+  const [searchCriteria, setSearchCriteria] = useState(
+    (location.state && location.state.name) || "");
   const [sortCriteria, setSortCriteria] = useState("dating");
   const [filteredFiles, setFilteredFiles] = useState();
   const [currentPage, setCurrentPage] = useState(1);
   const [currentClient, setCurrentClient] = useState("?");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [pendingIndex, setPendingIndex] = useState(null);
+  const { t } = useTranslation();
 
   // const response = fetch("http://localhost:3000/files/deleteAllFiles", {
   //   method: "DELETE",
   //   credentials: "include",
   // });
   
+  // const chanel1 =  chanels.deleteAllChats(
+  //   chatClient,
+  //   user.id,
+  //   user.streamToken
+  //   );
+
   useEffect(() => {
     switch (sortCriteria) {
       case "dating":
@@ -93,6 +103,13 @@ function Files({ setIsUploading, isUploading }) {
   }, [sortCriteria, serverFiles]);
 
   useEffect(() => {
+    const savedTypeFile = localStorage.getItem("selectedTypeFile");
+    if (savedTypeFile && !currentTypeFile) {
+      setCurrentTypeFile(savedTypeFile);
+    }
+  }, []);
+
+  useEffect(() => {
     if (user && user.id !== undefined) {
       if (user.role === "Client") {
         setShowDrop(true);
@@ -113,7 +130,7 @@ function Files({ setIsUploading, isUploading }) {
               setShowDrop(true);
             } else setOwnerOfFiles(user.id);
           })
-          .catch((error) => {
+          .catch(() => {
             setOwnerOfFiles(user.id);
           });
       }
@@ -128,32 +145,11 @@ function Files({ setIsUploading, isUploading }) {
       }
   }, [ownerOfFiles]);
 
-  const getClientName = async () => {
-    try {
-      const response = await fetch(
-        `http://localhost:3000/users/user?id=${ownerOfFiles}`,
-        {
-          method: "GET",
-          credentials: "include",
-        }
-      );
-      if (response.ok) {
-        const client = await response.json();
-        setCurrentClient(client.name);
-      } else {
-        console.error(response.message);
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
   useEffect(() => {
-    const savedTypeFile = localStorage.getItem("selectedTypeFile");
-    if (savedTypeFile && !currentTypeFile) {
-      setCurrentTypeFile(savedTypeFile);
+    if (ownerOfFiles && user.id != undefined && currentTypeFile) {
+      loadFiles();
     }
-  }, []);
+  }, [ownerOfFiles, filesChanged, currentTypeFile]);
 
   useEffect(() => {
     if (uploadStatus == "uploading files...") setIsUploading(true);
@@ -168,6 +164,26 @@ function Files({ setIsUploading, isUploading }) {
     setRejectedFiles(rejectedFiles);
   }, []);
 
+  const getClientName = async () => {
+    try {
+      const response = await fetch(
+        `http://localhost:3000/users/user?id=${ownerOfFiles}`,
+        {
+          method: "GET",
+          credentials: "include",
+        }
+      );
+      if (response.ok) {
+        const client = await response.json();
+        setCurrentClient(client.name);
+      } else {
+        toast.error(error.message);
+      }
+    } catch (error) {
+      toasting("error", error.message ? error.message : error);
+    }
+  };
+
   const handleUpload = async () => {
     const formData = new FormData();
     files.forEach((file) => {
@@ -176,7 +192,7 @@ function Files({ setIsUploading, isUploading }) {
     formData.append("uploaderID", user.id);
     formData.append("clientID", ownerOfFiles);
     formData.append("typeFile", currentTypeFile);
-    formData.append("filesNames", files.map((file) => file.name).join(",")); // שליחת שמות הקבצים כמחרוזת מופרדת בפסיקים
+    formData.append("filesNames", files.map((file) => file.name).join(","));
     setUploadStatus("uploading files...");
     axios
       .post("http://localhost:3000/files/upload", formData, {
@@ -194,12 +210,6 @@ function Files({ setIsUploading, isUploading }) {
         setUploadStatus(error.response.data);
       });
   };
-
-  useEffect(() => {
-    if (ownerOfFiles && user.id != undefined && currentTypeFile) {
-      loadFiles();
-    }
-  }, [ownerOfFiles, filesChanged, currentTypeFile]);
 
   const { getRootProps, getInputProps } = useDropzone({
     onDrop,
@@ -285,14 +295,16 @@ function Files({ setIsUploading, isUploading }) {
                 >
                   <input {...getInputProps()} multiple />
                   <p>
-                    <TbDragDrop /> Drag 'n' drop PDF files here, or click to
-                    select files
+                    <TbDragDrop />
+                    {t(
+                      "Drag 'n' drop PDF files here, or click to select files"
+                    )}
                   </p>
                 </div>
                 {files.length > 0 && (
                   <div>
                     <div className="files-container">
-                      <h4>Files to be uploaded:</h4>
+                      <h4>{t("Files to be uploaded:")}</h4>
                       <ul>
                         {files.map((file, index) => (
                           <div key={index} className="file-box">
@@ -314,7 +326,7 @@ function Files({ setIsUploading, isUploading }) {
                     </div>
                     {uploadStatus != "uploading files..." ? (
                       <button className="upload-btn" onClick={handleUpload}>
-                        Upload
+                        {t("Upload")}
                       </button>
                     ) : (
                       <></>
@@ -323,7 +335,7 @@ function Files({ setIsUploading, isUploading }) {
                 )}
                 {rejectedFiles.length > 0 && (
                   <div>
-                    <h4>Rejected files:</h4>
+                    <h4>{t("Rejected files:")}</h4>
                     <ul>
                       {rejectedFiles.map(({ file, errors }, index) => (
                         <li key={index}>
@@ -332,7 +344,7 @@ function Files({ setIsUploading, isUploading }) {
                         </li>
                       ))}
                     </ul>
-                    <p>Only PDF files are allowed.</p>
+                    <p>{t("Only PDF files are allowed.")}</p>
                   </div>
                 )}
               </div>
@@ -340,7 +352,10 @@ function Files({ setIsUploading, isUploading }) {
             {uploadStatus && <p>{uploadStatus}</p>}
             <div className="filesTitle">
               {currentClient && (
-                <h5 className="yourFiles">{currentClient}'s files:</h5>
+                <h5 className="yourFiles">
+                  {currentClient}
+                  {t("'s files:")}
+                </h5>
               )}
 
               <div className="search-bar">
@@ -367,12 +382,12 @@ function Files({ setIsUploading, isUploading }) {
                   setSortCriteria(event.target.value);
                 }}
               >
-                <option value="dating">dating</option>
-                <option value="Pending">Pending</option>
-                <option value="Rejected">Rejected</option>
-                <option value="Approved">Approved</option>
-                <option value="alphabetical">Alphabetical</option>
-                <option value="random">random</option>
+                <option value="dating">{t("dating")}</option>
+                <option value="Pending">{t("Pending")}</option>
+                <option value="Rejected">{t("Rejected")}</option>
+                <option value="Approved">{t("Approved")}</option>
+                <option value="alphabetical">{t("Alphabetical")}</option>
+                <option value="random">{t("random")}</option>
               </select>
             </div>
             <div className="files">
@@ -383,23 +398,21 @@ function Files({ setIsUploading, isUploading }) {
                   searchCriteria={searchCriteria}
                   filesChanged={filesChanged}
                   setFilesChanged={setFilesChanged}
-                  ownerOfFiles={ownerOfFiles}
-                  userToken={user.streamToken}
                 />
               ))}
             </div>
             {filteredFiles.length > currentPage * 7 ? (
               <button className="load-more-btn" onClick={handleLoadMore}>
-                Load More Files ({filteredFiles.length - currentPage * 7}{" "}
-                remaining)
+                {t("Load More Files")} ({filteredFiles.length - currentPage * 7}{" "}
+                {t("remaining")})
               </button>
             ) : (
-              <p>There are no more files to load.</p>
+              <p>{t("There are no more files to load.")}</p>
             )}{" "}
           </div>
         ) : (
           <div className="hand">
-            turn in the 3 points on the side
+            {t("turn in the 3 points on the side")}
             <br />
             <FaRegHandPointRight />
           </div>
@@ -411,15 +424,15 @@ function Files({ setIsUploading, isUploading }) {
           className="modal"
           overlayClassName="overlay"
         >
-          <h2>Are you sure?</h2>
+          <h2>{t("Are you sure?")}</h2>
           <p>
-            Are you sure you don't want to upload the file{" "}
+            {t("Are you sure you don't want to upload the file")}{" "}
             <strong>{pendingIndex}</strong> ?
           </p>
           <button onClick={confirmNotUpload} autoFocus>
-            Yes
+            {t("Yes")}
           </button>
-          <button onClick={cancelNotUpload}>No</button>
+          <button onClick={cancelNotUpload}>{t("No")}</button>
         </Modal>
       </div>
     </DndProvider>
